@@ -21,9 +21,9 @@ namespace DiskManagerApplication
                 ManagementScope scope = connectionService.GetCIMConnection(options);
                 scope.Connect();
 
-                MenuService menuService = new MenuService();
+                MenuService menuService = new MenuService(scope);
                 menuService.MainMenu();
-
+                Console.ReadLine();
             }
             catch (Exception e)
             {

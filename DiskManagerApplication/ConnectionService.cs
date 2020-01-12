@@ -19,7 +19,7 @@ namespace DiskManagerApplication
             string computerName = Environment.MachineName;
             if (computerName == null || computerName == "/0")
                 throw new Exception("CIM Connection failed");
-            Console.WriteLine("Your computer name: {0}", computerName);
+            Console.WriteLine("Your computer name: {0}\n", computerName);
             return new ManagementScope($"\\\\{computerName}\\root\\cimv2", options);
         }
     }
