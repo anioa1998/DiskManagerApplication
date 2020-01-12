@@ -22,8 +22,11 @@ namespace DiskManagerApplication
                 scope.Connect();
 
                 MenuService menuService = new MenuService(scope);
+                    
                 menuService.MainMenu();
-                Console.ReadLine();
+
+                menuService.ExitMessage();
+                    
             }
             catch (Exception e)
             {
