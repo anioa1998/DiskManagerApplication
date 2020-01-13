@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Management;
+using System.Runtime.InteropServices;
 
 namespace DiskManagerApplication
-{
+{    
     class Program
     {
         static void Main(string[] args)
@@ -22,7 +23,7 @@ namespace DiskManagerApplication
                 scope.Connect();
 
                 MenuService menuService = new MenuService(scope);
-                    
+
                 menuService.MainMenu();
 
                 menuService.ExitMessage();

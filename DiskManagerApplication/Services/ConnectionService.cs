@@ -9,6 +9,17 @@ namespace DiskManagerApplication
 {
     public class ConnectionService
     {
+        ManagementScope scope { get; set; }
+        ObjectQuery query { get; set; }
+        ManagementObjectSearcher searcher { get; set; }
+
+        public ConnectionService() { }
+
+        public ConnectionService(ManagementScope scope)
+        {
+            this.scope = scope;
+        }
+
         public ImpersonationLevel SetImpersonationLevel()
         {
             return ImpersonationLevel.Impersonate;
@@ -21,6 +32,18 @@ namespace DiskManagerApplication
                 throw new Exception("CIM Connection failed");
             Console.WriteLine("Your computer name: {0}\n", computerName);
             return new ManagementScope($"\\\\{computerName}\\root\\cimv2", options);
+        }
+
+        public ManagementObjectCollection GetQueryCollectionFromWin32Class(string ClassName)
+        {
+            query = new ObjectQuery($"SELECT * FROM {ClassName}");
+            if (query == null)
+                throw new Exception("Nie wykonano zapytania - ObjectQuery Failed");
+
+            searcher = new ManagementObjectSearcher(scope, query);
+            if (searcher == null)
+                throw new Exception("Nie znaleziono obiektów spełniających zapytanie - ManagementObjectSearcher Failed");
+            return searcher.Get();
         }
     }
 }

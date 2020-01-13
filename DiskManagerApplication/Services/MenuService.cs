@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,6 +10,10 @@ namespace DiskManagerApplication
 {
     public class MenuService
     {
+
+        [DllImport(@"D:\Semestr V\PS\CppLibraryToCsTry.dll", EntryPoint = "disk_info", CallingConvention = CallingConvention.StdCall)]
+        public static extern int ShowDiskInfo();
+
         public ManagementScope scope { get; set; }
 
         public MenuService(ManagementScope scope)
@@ -20,15 +25,13 @@ namespace DiskManagerApplication
         {
             int mainMenuSelect;
             bool switchExit = true;
-            Console.WriteLine("Witaj w menu głównym DiskManagerApplication. Wybierz opcję:");
-
-            MainMenuOptions();
-
-            
-            mainMenuSelect = Convert.ToInt32(Console.ReadLine());
             
             do
             {
+                Console.WriteLine("Witaj w menu głównym DiskManagerApplication. Wybierz opcję:");
+
+                MainMenuOptions();
+                mainMenuSelect = Convert.ToInt32(Console.ReadLine());
                 Console.Clear();
                 switchExit = true;
 
@@ -40,34 +43,41 @@ namespace DiskManagerApplication
                         }
                     case 1:
                         {
-                            DiskPartitionInformationMenu();
+                            switchExit = DiskPartitionInformationMenu();
                             break;
                         }
                     case 2:
                         {
-
+                            int result = ShowDiskInfo();
+                            Console.WriteLine(result);
+                            Console.ReadLine();
                             break;
                         }
                     case 3:
                         {
                             break;
                         }
+                    case 4:
+                        {
+                            break;
+                        }
                     default:
                         {
                             Console.WriteLine("Wybrana opcja nie istnieje. Wybierz ponownie.\n");
-                            MainMenuOptions();
-                            mainMenuSelect = Convert.ToInt32(Console.ReadLine());
                             switchExit = false;
                             break;
                         }
                 }
+
             } while (!switchExit);
         }
 
-        private void DiskPartitionInformationMenu()
+        private bool DiskPartitionInformationMenu()
         {
             DiskPartitionInformation diskPartitionInformation = new DiskPartitionInformation(scope);
             int diskInformationSelect;
+
+            bool escapeFromMenu  = true;
 
             DiskPartitionInformationMenuOptions();
 
@@ -81,12 +91,17 @@ namespace DiskManagerApplication
                     }
                 case 1:
                     {
-                        diskPartitionInformation.ShowDiskInformation();
+                        escapeFromMenu = diskPartitionInformation.ShowDiskInformation();
                         break;
                     }
                 case 2:
                     {
-                        diskPartitionInformation.ShowPartitionInformation();
+                        escapeFromMenu = diskPartitionInformation.ShowPartitionInformation();
+                        break;
+                    }
+                case 3:
+                    {
+                        escapeFromMenu = diskPartitionInformation.ShowLogicalDiskInformation();
                         break;
                     }
                 default:
@@ -96,13 +111,15 @@ namespace DiskManagerApplication
             }
 
             Console.Clear();
+            return escapeFromMenu;
         }
 
         private void MainMenuOptions()
         {
             Console.WriteLine("[1] - Parametry dysków HDD, SSD, USB i ich partycji");
-            Console.WriteLine("[2] - Dane S.M.A.R.T. *Obsługuje prawidłowo jedynie dyski HDD");
-            Console.WriteLine("[3] - Formatowanie wybranej partycji");
+            Console.WriteLine("[2] - Parametry dysków HDD, SSD, USB z wykorzystaniem C++ [NOWE]");
+            Console.WriteLine("[3] - Dane S.M.A.R.T. *Obsługuje prawidłowo jedynie dyski HDD");
+            Console.WriteLine("[4] - Formatowanie wybranej partycji");
             Console.WriteLine("[0] - Wyjście z programu");
             Console.Write("Wybieram: ");
         }
@@ -114,6 +131,7 @@ namespace DiskManagerApplication
             Console.WriteLine("---------------------------------------------");
             Console.WriteLine("[1] - Wyświetl parametry dysków"); //Automatyczne generowanie raportu .txt
             Console.WriteLine("[2] - Wyświetl parametry partycji");
+            Console.WriteLine("[3] - Wyświetl parametry dysków logicznych");
             Console.WriteLine("[0] - Wyjście z programu");
             Console.Write("Wybieram: ");
         }
