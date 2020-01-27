@@ -45,5 +45,18 @@ namespace DiskManagerApplication
                 throw new Exception("Nie znaleziono obiektów spełniających zapytanie - ManagementObjectSearcher Failed");
             return searcher.Get();
         }
+
+        public ManagementObjectCollection GetQueryCollectionFromWMI(string ClassName)
+        {
+            searcher = new ManagementObjectSearcher("Select * from Win32_DiskDrive");
+            if (searcher == null)
+                throw new Exception("Nie znaleziono obiektów spełniających zapytanie - ManagementObjectSearcher Failed");
+            searcher.Scope = new ManagementScope(@"\root\wmi");
+            query = new ObjectQuery($"SELECT * FROM {ClassName}");
+            if (query == null)
+                throw new Exception("Nie wykonano zapytania - ObjectQuery Failed");
+
+            return searcher.Get();
+        }
     }
 }

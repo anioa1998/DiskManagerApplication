@@ -9,8 +9,8 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
 {
     public interface ISmartBuilder
     {
-        void SetScope(ManagementScope scope);
-        void SetDriveStorage();
+        ISmartBuilder SetScope(ManagementScope scope);
+        ISmartBuilder SetDriveStorage();
         void Build();
     }
 }

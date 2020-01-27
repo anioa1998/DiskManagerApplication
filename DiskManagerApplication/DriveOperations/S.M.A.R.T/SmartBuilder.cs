@@ -15,13 +15,15 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
 
         private int driveIndex = 0;
 
-        public void SetScope(ManagementScope scope)
+        public ISmartBuilder SetScope(ManagementScope scope)
         {
             connectionService = new ConnectionService(scope);
+            return this;
         }
-        public void SetDriveStorage()
+        public ISmartBuilder SetDriveStorage()
         {
             allDrivesDictionary = new Dictionary<int, DriveData>();
+            return this;
         }
 
         private void FindAllDrives()
@@ -48,7 +50,7 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
         private void SetStatusToAllDrives()
         {
             driveIndex = 0;
-            queryCollection = connectionService.GetQueryCollectionFromWin32Class("MSStorageDriver_FailurePredictStatus");
+            queryCollection = connectionService.GetQueryCollectionFromWMI("MSStorageDriver_FailurePredictStatus");
             foreach (ManagementObject foundDrive in queryCollection)
             {
                 if ((bool)foundDrive.Properties["PredictFailure"].Value == false)
@@ -86,25 +88,81 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
                         helper.worst = byteArray[i * 12 + 6];
                         helper.vendorData = BitConverter.ToInt32(byteArray, i * 12 + 7);
 
-//var currentAttribute
+                        var currentAttribute = allDrivesDictionary[driveIndex].Attributes[helper.id];
+
+                        currentAttribute.Current = helper.value;
+                        currentAttribute.Worst = helper.worst;
+                        currentAttribute.Data = helper.vendorData;
+                        if (helper.failureIsComing == false)
+                            currentAttribute.Status = true;
+                        else
+                            currentAttribute.Status = false;
                     }
                     catch
                     {
                         //Podane id nie zostało uwzględnione pośród wymienionych atrybutów (DriveData)
                     }
                 }
-
+                driveIndex++;
             }
 
         }
 
         private void SetThresholdsToDrives()
         {
+            SmartObjectHelper helper;
+            driveIndex = 0;
+            queryCollection = connectionService.GetQueryCollectionFromWin32Class("MSStorageDriver_FailurePredictThresholds");
 
+            foreach (ManagementObject drivePredictData in queryCollection)
+            {
+                //Wszystkie dane zakodowane są na poszczególnych pozycjach pozyskanej tablicy bitów
+                Byte[] byteArray = (Byte[])drivePredictData.Properties["VendorSpecific"].Value;
+                for (int i = 0; i < 30; ++i)
+                {
+                    try
+                    {
+                        helper = new SmartObjectHelper();
+                        helper.id = byteArray[i * 12 + 2];
+                        if (helper.id == 0) continue;
+
+                        helper.threshold = byteArray[i * 12 + 3];
+
+                        var currentAttribute = allDrivesDictionary[driveIndex].Attributes[helper.id];
+
+                        currentAttribute.Threshold = helper.threshold;
+                    }
+                    catch
+                    {
+                        //Podane id nie zostało uwzględnione pośród wymienionych atrybutów (DriveData)
+                    }
+                    
+                }
+
+                driveIndex++;
+            }
         }
         private void PrintInfomation()
         {
+            foreach (var drive in allDrivesDictionary)
+            {
+                Console.WriteLine("-----------------------------------------------------");
+                Console.WriteLine(" DRIVE ({0}): " + drive.Value.Serial + " - " + drive.Value.Model + " - " + drive.Value.Type, ((drive.Value.IsOK) ? "OK" : "BAD"));
+                Console.WriteLine("-----------------------------------------------------");
+                Console.WriteLine("");
 
+                Console.WriteLine("ID                   Current  Worst  Threshold  Data  Status");
+                foreach (var attr in drive.Value.Attributes)
+                {
+                    if (attr.Value.CheckIfHasData)
+                        Console.WriteLine("{0}\t {1}\t {2}\t {3}\t " + attr.Value.Data + " " + ((attr.Value.Status) ? "OK" : ""), attr.Value.Attribute, attr.Value.Current, attr.Value.Worst, attr.Value.Threshold);
+                }
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
+            }
+
+            Console.ReadLine();
         }
         public void Build()
         {

@@ -14,5 +14,6 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
         public int value { get; set; }
         public int worst { get; set; }
         public int vendorData { get; set; }
+        public int threshold { get; set; }
     }
 }

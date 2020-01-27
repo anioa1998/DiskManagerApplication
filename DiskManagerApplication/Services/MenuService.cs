@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DiskManagerApplication.DriveOperations.S.M.A.R.T;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
@@ -69,6 +70,10 @@ namespace DiskManagerApplication
                         }
                     case 3:
                         {
+                            ISmartBuilder builder = new SmartBuilder();
+                            builder.SetScope(scope)
+                                   .SetDriveStorage()
+                                   .Build();
                             break;
                         }
                     case 4:
