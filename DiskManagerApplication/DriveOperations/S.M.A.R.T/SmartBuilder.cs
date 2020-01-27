@@ -77,10 +77,16 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
                         helper = new SmartObjectHelper();
 
                         //Co 12 bitów zmienia się argument, a jego id znajduje się na pozycji 2
-                        helper.id = byteArray[i * 12 + 2]; 
+                        helper.id = byteArray[i * 12 + 2];
+                        if (helper.id == 0) continue;
+
                         helper.flags = byteArray[i * 12 + 4]; //określa najmłodszy bit statusu, pozostała reszta jest ignorowana
                         helper.failureIsComing = (helper.flags & 0x1) == 0x1;
-                        helper.value = byteArray[i * 12 + 5]; 
+                        helper.value = byteArray[i * 12 + 5];
+                        helper.worst = byteArray[i * 12 + 6];
+                        helper.vendorData = BitConverter.ToInt32(byteArray, i * 12 + 7);
+
+//var currentAttribute
                     }
                     catch
                     {

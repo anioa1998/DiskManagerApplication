@@ -79,7 +79,6 @@ namespace DiskManagerApplication
 
                             do
                             {
-
                                 fsCode = ChooseFileSystemMenuOptions();
 
                             } while (fsCode != 1 && fsCode != 2);
