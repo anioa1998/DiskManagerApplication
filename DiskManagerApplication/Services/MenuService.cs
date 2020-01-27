@@ -78,37 +78,44 @@ namespace DiskManagerApplication
             int diskInformationSelect;
 
             bool escapeFromMenu  = true;
-
+            bool switchExit = true;
+            do
+            {
             DiskPartitionInformationMenuOptions();
 
             diskInformationSelect = Convert.ToInt32(Console.ReadLine());
-
-            switch(diskInformationSelect)
-            {
-                case 0:
-                    {
-                        break;
-                    }
-                case 1:
-                    {
-                        escapeFromMenu = diskPartitionInformation.ShowDiskInformation();
-                        break;
-                    }
-                case 2:
-                    {
-                        escapeFromMenu = diskPartitionInformation.ShowPartitionInformation();
-                        break;
-                    }
-                case 3:
-                    {
-                        escapeFromMenu = diskPartitionInformation.ShowLogicalDiskInformation();
-                        break;
-                    }
-                default:
-                    {
-                        break;
-                    }
-            }
+  
+                switchExit = true;
+                switch (diskInformationSelect)
+                {
+                    case 0:
+                        {
+                            break;
+                        }
+                    case 1:
+                        {
+                            escapeFromMenu = diskPartitionInformation.ShowDiskInformation();
+                            break;
+                        }
+                    case 2:
+                        {
+                            escapeFromMenu = diskPartitionInformation.ShowPartitionInformation();
+                            break;
+                        }
+                    case 3:
+                        {
+                            escapeFromMenu = diskPartitionInformation.ShowLogicalDiskInformation();
+                            break;
+                        }
+                    default:
+                        {
+                            Console.Clear();
+                            Console.WriteLine("Wybrana opcja nie istnieje. Wybierz ponownie.\n");
+                            switchExit = false;
+                            break;
+                        }
+                }
+            } while (!switchExit);
 
             Console.Clear();
             return escapeFromMenu;
