@@ -174,8 +174,6 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
                 Console.WriteLine();
                 Console.WriteLine();
             }
-
-            Console.ReadLine();
         }
         public void Build()
         {
