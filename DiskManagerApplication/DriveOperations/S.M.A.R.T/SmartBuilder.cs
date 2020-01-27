@@ -50,7 +50,7 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
         private void SetStatusToAllDrives()
         {
             driveIndex = 0;
-            queryCollection = connectionService.GetQueryCollectionFromWMI("MSStorageDriver_FailurePredictStatus");
+            queryCollection = connectionService.GetQueryCollectionFromDiskDrive("MSStorageDriver_FailurePredictStatus");
             foreach (ManagementObject foundDrive in queryCollection)
             {
                 if ((bool)foundDrive.Properties["PredictFailure"].Value == false)
@@ -67,7 +67,7 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
             //Ściąga językowa - vendor specific jako dostawca 
             SmartObjectHelper helper;
             driveIndex = 0;
-            queryCollection = connectionService.GetQueryCollectionFromWin32Class("MSStorageDriver_FailurePredictData");
+            queryCollection = connectionService.GetQueryCollectionFromDiskDrive("MSStorageDriver_FailurePredictData");
 
             foreach(ManagementObject drivePredictData in queryCollection)
             {
@@ -112,7 +112,7 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
         {
             SmartObjectHelper helper;
             driveIndex = 0;
-            queryCollection = connectionService.GetQueryCollectionFromWin32Class("MSStorageDriver_FailurePredictThresholds");
+            queryCollection = connectionService.GetQueryCollectionFromDiskDrive("MSStorageDriver_FailurePredictThresholds");
 
             foreach (ManagementObject drivePredictData in queryCollection)
             {

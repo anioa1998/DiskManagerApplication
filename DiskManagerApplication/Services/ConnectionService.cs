@@ -46,15 +46,14 @@ namespace DiskManagerApplication
             return searcher.Get();
         }
 
-        public ManagementObjectCollection GetQueryCollectionFromWMI(string ClassName)
+        public ManagementObjectCollection GetQueryCollectionFromDiskDrive(string ClassName)
         {
-            searcher = new ManagementObjectSearcher("Select * from Win32_DiskDrive");
-            if (searcher == null)
-                throw new Exception("Nie znaleziono obiektów spełniających zapytanie - ManagementObjectSearcher Failed");
+            // get wmi access to hdd 
+            var searcher = new ManagementObjectSearcher("Select * from Win32_DiskDrive");
             searcher.Scope = new ManagementScope(@"\root\wmi");
-            query = new ObjectQuery($"SELECT * FROM {ClassName}");
-            if (query == null)
-                throw new Exception("Nie wykonano zapytania - ObjectQuery Failed");
+
+            // check if SMART reports the drive is failing
+            searcher.Query = new ObjectQuery($"Select * from {ClassName}");
 
             return searcher.Get();
         }

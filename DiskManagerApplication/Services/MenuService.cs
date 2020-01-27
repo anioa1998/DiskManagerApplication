@@ -74,6 +74,15 @@ namespace DiskManagerApplication
                             builder.SetScope(scope)
                                    .SetDriveStorage()
                                    .Build();
+                            do
+                            {
+                                returnCode = ReturnMenu();
+                            } while (returnCode != 0 && returnCode != 1);
+                            if (returnCode == 0)
+                                switchExit = true;
+                            else
+                                switchExit = false;
+                            Console.Clear();
                             break;
                         }
                     case 4:
