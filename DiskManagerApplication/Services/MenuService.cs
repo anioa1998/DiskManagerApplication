@@ -59,6 +59,9 @@ namespace DiskManagerApplication
                         }
                     case 4:
                         {
+                            DiskFormat diskFormat = new DiskFormat();
+                            Console.WriteLine("Podaj literę dysku który chcesz sformatować i nacisnij ENTER");
+                            diskFormat.FormatDrive(Console.ReadLine());
                             break;
                         }
                     default:
