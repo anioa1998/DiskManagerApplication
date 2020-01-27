@@ -30,7 +30,8 @@ namespace DiskManagerApplication
             string driveLetter;
             string fsName = "FAT32";
             string label;
-            
+            string confirm;
+
             do
             {
                 Console.WriteLine("Witaj w menu głównym DiskManagerApplication. Wybierz opcję:");
@@ -89,7 +90,20 @@ namespace DiskManagerApplication
                                 fsName = "NTFS";
 
                             label = TypeDriveNameMenu();
-                            diskFormat.FormatDrive(driveLetter, fsName,label);
+
+                            do
+                            {
+                                confirm = ConfirmFormatingMenu(driveLetter, fsName, label);
+                            } while (confirm != "t" && confirm != "n");
+
+                            if (confirm == "t")
+                            {
+                                diskFormat.FormatDrive(driveLetter, fsName, label);                               
+                            }
+                            else if (confirm == "n")
+                            {
+                                Console.WriteLine("Anulowano operację ! \n");
+                            }
 
                             do
                             {
@@ -203,26 +217,45 @@ namespace DiskManagerApplication
 
         private string FormatingMenuOptions()
         {
-            Console.WriteLine("---------------------------------------------");
-            Console.WriteLine("Formatowanie wybranego dysku ");
-            Console.WriteLine("---------------------------------------------");
+            Console.WriteLine("---------------------------------------------\n");
+            Console.WriteLine("!****** Formatowanie wybranego dysku *******!\n");
+            Console.WriteLine("---------------------------------------------\n");
             Console.WriteLine("[KROK 1/3] Podaj literę dysku który chcesz sformatować ( w formacie E: )");
             return Convert.ToString(Console.ReadLine());
         }
 
         private int ChooseFileSystemMenuOptions()
         {
-            Console.WriteLine("---------------------------------------------");
+            Console.WriteLine("---------------------------------------------\n");
             Console.WriteLine("[KROK 2/3] Wybierz system plików ");
             Console.WriteLine("[1] - FAT32");
-            Console.WriteLine("[2] - NTFS");
+            Console.WriteLine("[2] - NTFS \n");
             return Convert.ToInt32(Console.ReadLine());
         }
 
         private string TypeDriveNameMenu()
         {
-            Console.WriteLine("---------------------------------------------");
-            Console.WriteLine("[KROK 3/3] Podaj nową nazwę utworzonego dysku");
+            Console.WriteLine("---------------------------------------------\n");
+            Console.WriteLine("[KROK 3/3] Podaj nową nazwę utworzonego dysku\n");
+            return Convert.ToString(Console.ReadLine());
+        }
+
+        private string ConfirmFormatingMenu(string letter, string filesystem, string name)
+        {
+            Console.WriteLine("^^^^^^^^^^^^^^^^^^^^UWAGA^^^^^^^^^^^^^^^^^^^^\n");
+            Console.WriteLine("OSTRZEŻENIE! OPERACJA USUNIE WSZELKIE DANE Z DYSKU");
+            Console.WriteLine("---------------------------------------------\n");
+            Console.WriteLine("Wprowadzone dane : \n");
+
+            Console.WriteLine("[Litera formatowanego dysku] : " + letter);
+            Console.WriteLine("[Wybrany system plików] :" + filesystem);
+            Console.WriteLine("[Nowa nazwa dysku] : " + name + "\n");
+
+
+            Console.WriteLine("---------------------------------------------\n");
+
+            Console.WriteLine("Czy na pewno chcesz dokonać formatowania dysku (t/n) ? \n");
+
             return Convert.ToString(Console.ReadLine());
         }
 
