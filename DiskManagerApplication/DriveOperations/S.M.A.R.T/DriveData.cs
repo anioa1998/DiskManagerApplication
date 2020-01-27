@@ -8,7 +8,7 @@ using DiskManagerApplication.DriveOperations.S.M.A.R.T;
 
 namespace DiskManagerApplication
 {
-    public class HardDriveData
+    public class DriveData
     {
         //ManagementScope scope { get; set; }
         //public SMARTData(ManagementScope scope)
