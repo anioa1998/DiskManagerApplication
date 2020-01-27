@@ -24,6 +24,7 @@ namespace DiskManagerApplication
         public void MainMenu()
         {
             int mainMenuSelect;
+            int returnCode;
             bool switchExit = true;
             
             do
@@ -47,11 +48,19 @@ namespace DiskManagerApplication
                             break;
                         }
                     case 2:
+
                         {
-                            int result = ShowDiskInfo();
-                            Console.WriteLine(result); // dotąd nic nie edytuj
-                            Console.ReadLine();
-                            break;
+                            int result = ShowDiskInfo(); // dotąd nic nie edytuj
+                            do
+                            {
+                                returnCode = ReturnMenu();
+                            } while (returnCode != 0 && returnCode != 1);
+                            if (returnCode == 0)
+                                switchExit = true;
+                            else
+                                switchExit = false;
+                            Console.Clear();
+                                break;
                         }
                     case 3:
                         {
@@ -144,6 +153,13 @@ namespace DiskManagerApplication
             Console.WriteLine("[3] - Wyświetl parametry dysków logicznych");
             Console.WriteLine("[0] - Wyjście z programu");
             Console.Write("Wybieram: ");
+        }
+        private int ReturnMenu()
+        {
+            Console.WriteLine("[0] - Wyjście z programu");
+            Console.WriteLine("[1] - Wróć do menu głównego");
+            Console.Write("Wybieram: ");
+            return Convert.ToInt32(Console.ReadLine());
         }
 
         public void ExitMessage()

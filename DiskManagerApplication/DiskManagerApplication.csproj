@@ -67,13 +67,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DriveOperations\S.M.A.R.T\ISmartBuilder.cs" />
+    <Compile Include="DriveOperations\S.M.A.R.T\SmartBuilder.cs" />
+    <Compile Include="DriveOperations\S.M.A.R.T\SmartObject.cs" />
     <Compile Include="Services\ConnectionService.cs" />
     <Compile Include="DriveOperations\DiskFormat.cs" />
     <Compile Include="DriveOperations\DiskPartitionInformation.cs" />
     <Compile Include="Services\MenuService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
+   <Compile Include="DriveOperations\S.M.A.R.T\HardDriveData.cs" />  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="app.manifest">
