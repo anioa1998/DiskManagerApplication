@@ -144,18 +144,31 @@ namespace DiskManagerApplication.DriveOperations.S.M.A.R.T
         }
         private void PrintInfomation()
         {
+            string[] boolAnswerDrive = { "BAD", "OK" };
+            string[] boolAnswerData = { "", "OK" };
+            string spaces = "";
+            string tabs = "";
+            int select;
+
             foreach (var drive in allDrivesDictionary)
             {
+                select = drive.Value.IsOK ? 1 : 0;
                 Console.WriteLine("-----------------------------------------------------");
-                Console.WriteLine(" DRIVE ({0}): " + drive.Value.Serial + " - " + drive.Value.Model + " - " + drive.Value.Type, ((drive.Value.IsOK) ? "OK" : "BAD"));
+                Console.WriteLine($" Dysk ({boolAnswerDrive[select]}): {drive.Value.Serial} - {drive.Value.Model} - {drive.Value.Type}");
                 Console.WriteLine("-----------------------------------------------------");
                 Console.WriteLine("");
 
-                Console.WriteLine("ID                   Current  Worst  Threshold  Data  Status");
+                Console.WriteLine("ID                                      Current  Worst   Threshold Data   Status");
                 foreach (var attr in drive.Value.Attributes)
                 {
                     if (attr.Value.CheckIfHasData)
-                        Console.WriteLine("{0}\t {1}\t {2}\t {3}\t " + attr.Value.Data + " " + ((attr.Value.Status) ? "OK" : ""), attr.Value.Attribute, attr.Value.Current, attr.Value.Worst, attr.Value.Threshold);
+                    {
+                        spaces = "";
+                        for (int i = 0; i < 40 - attr.Value.Attribute.Length; i++)
+                            spaces += " ";
+                        select = attr.Value.Status ? 1 : 0;
+                        Console.WriteLine($"{attr.Value.Attribute}{spaces}{attr.Value.Current}\t {attr.Value.Worst}\t {attr.Value.Threshold}\t   {attr.Value.Data}    {boolAnswerData[select]}");
+                    }
                 }
                 Console.WriteLine();
                 Console.WriteLine();
