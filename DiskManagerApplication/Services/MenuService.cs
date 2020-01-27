@@ -11,7 +11,7 @@ namespace DiskManagerApplication
     public class MenuService
     {
 
-        [DllImport(@"D:\Semestr V\PS\CppLibraryToCsTry.dll", EntryPoint = "disk_info", CallingConvention = CallingConvention.StdCall)]
+        [DllImport(@"DiskInfoCppLibrary.dll", EntryPoint = "disk_info", CallingConvention = CallingConvention.StdCall)]
         public static extern int ShowDiskInfo();
 
         public ManagementScope scope { get; set; }
@@ -49,7 +49,7 @@ namespace DiskManagerApplication
                     case 2:
                         {
                             int result = ShowDiskInfo();
-                            Console.WriteLine(result);
+                            Console.WriteLine(result); // dotąd nic nie edytuj
                             Console.ReadLine();
                             break;
                         }
