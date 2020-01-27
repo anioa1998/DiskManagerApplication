@@ -15,7 +15,10 @@ namespace DiskManagerApplication
         {
             
             if (driveLetter.Length != 2 || driveLetter[1] != ':' || !char.IsLetter(driveLetter[0]))
+            {
+                Console.WriteLine("Wprowadzono nieprawidłową literę dysku ! \n");
                 return false;
+            }
 
             var files = Directory.GetFiles(driveLetter);
             var directories = Directory.GetDirectories(driveLetter);

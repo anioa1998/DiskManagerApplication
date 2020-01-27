@@ -98,7 +98,7 @@ namespace DiskManagerApplication
 
                             if (confirm == "t")
                             {
-                                diskFormat.FormatDrive(driveLetter, fsName, label);                               
+                                    diskFormat.FormatDrive(driveLetter, fsName, label);
                             }
                             else if (confirm == "n")
                             {
