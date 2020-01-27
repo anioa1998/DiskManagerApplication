@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Management;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DiskManagerApplication
 {
     public class DiskFormat
     {
-        public bool FormatDrive(string driveLetter, string fileSystem = "FAT32", bool quickFormat = true,
-                                   int clusterSize = 8192, string label = "USB_0000", bool enableCompression = false)
+        public bool FormatDrive(string driveLetter, string fileSystem, string label, bool quickFormat = true,
+                                   int clusterSize = 8192, bool enableCompression = false)
         {
             
             if (driveLetter.Length != 2 || driveLetter[1] != ':' || !char.IsLetter(driveLetter[0]))
@@ -46,7 +50,12 @@ namespace DiskManagerApplication
 
                     watcher.Completed += (sender, args) =>
                     {
-                        Console.WriteLine("Formatowanie ukończone : " + args.Status);
+                        Console.WriteLine("---------------------------------------------\n");
+                        Console.WriteLine(" FORMATOWANIE DYSKU UKOŃCZONE !");
+                        Console.WriteLine("---------------------------------------------\n");
+                        Console.WriteLine("Status błędów : " + args.Status);
+                        Console.WriteLine("\n");
+
                         completed = true;
                     };
                     watcher.Progress += (sender, args) =>
@@ -59,8 +68,10 @@ namespace DiskManagerApplication
                     while (!completed) { System.Threading.Thread.Sleep(1000); }
 
                 }
-                catch { }               
-                
+                catch
+                {
+
+                }
             }
             return true;
         }
